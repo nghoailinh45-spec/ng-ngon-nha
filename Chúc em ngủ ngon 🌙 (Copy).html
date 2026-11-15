@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chúc em ngủ ngon 🌙 (Copy)</title>
+<style>
+:root{--bg1:#0b1030;--bg2:#2a1b5c;--bg3:#5b2a7a;--text:#fdf3ff;--soft:#f5c6e8;--accent:#ff8fc7;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:Georgia,"Times New Roman",serif;color:var(--text);background:linear-gradient(180deg,var(--bg1) 0%,var(--bg2) 60%,var(--bg3) 100%);overflow:hidden}
+canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+.moon{position:fixed;top:8%;right:10%;width:90px;height:90px;border-radius:50%;background:#fff6d8;box-shadow:0 0 50px 15px rgba(255,240,190,.35);z-index:1;animation:float 6s ease-in-out infinite}
+.moon::after{content:"";position:absolute;top:-8px;left:22px;width:90px;height:90px;border-radius:50%;background:var(--bg1);opacity:.97}
+@keyframes float{50%{transform:translateY(-12px)}}
+main{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;gap:26px}
+h1{font-size:clamp(2.1rem,8vw,3.8rem);font-weight:400;font-style:italic;text-shadow:0 0 25px rgba(255,143,199,.6);opacity:0;animation:in 2.5s .3s forwards}
+.wish{min-height:6.5em;max-width:560px;font-size:clamp(1.1rem,3.8vw,1.5rem);line-height:1.8;color:var(--soft);transition:opacity 1.2s;opacity:0}
+.wish.on{opacity:1}
+.sign{font-size:1rem;color:rgba(255,255,255,.6);font-style:italic;opacity:0;transition:opacity 2s}
+.sign.on{opacity:1}
+@keyframes in{to{opacity:1}}
+.heart{position:fixed;bottom:-30px;z-index:3;pointer-events:none;animation:up linear forwards}
+@keyframes up{to{transform:translateY(-110vh) rotate(25deg);opacity:0}}
+</style>
+</head>
+<body>
+<canvas id="sky"></canvas>
+<div class="moon"></div>
+<main>
+  <h1>Chúc em ngủ ngon 🌙</h1>
+  <p class="wish" id="wish"></p>
+  <p class="sign" id="sign">Mơ về anh nhé, vì anh sẽ mơ về em 💕</p>
+</main>
+<script>
+const wishes=[
+"Đêm nay trăng đẹp lắm, nhưng vẫn không đẹp bằng nụ cười của em.",
+"Khép mắt lại nhé, để những vì sao thay anh canh giấc ngủ cho em.",
+"Mọi mệt mỏi hôm nay hãy để lại ngoài cửa sổ. Ngày mai sẽ dịu dàng hơn với em.",
+"Nếu em thấy một ngôi sao vừa lấp lánh, đó là anh đang gửi nhớ thương đến em.",
+"Chúc em có một giấc mơ ngọt ngào, nơi mình luôn nắm tay nhau.",
+"Ngủ ngon nhé, người con gái anh thương nhất. Sáng mai anh vẫn ở đây, yêu em."
+];
+const w=document.getElementById('wish'),sg=document.getElementById('sign');
+let i=0;
+function step(){
+  w.classList.remove('on');
+  setTimeout(()=>{
+    w.textContent=wishes[i];w.classList.add('on');
+    const last=i===wishes.length-1;i++;
+    if(last){sg.classList.add('on');hearts(30);setInterval(()=>hearts(4),3000)}
+    else setTimeout(step,5500);
+  },1300);
+}
+setTimeout(step,1800);
+function hearts(n){for(let k=0;k<n;k++){const h=document.createElement('div');h.className='heart';h.textContent=['💖','💫','⭐','🌙','💕'][k%5];h.style.left=Math.random()*100+'vw';h.style.fontSize=(16+Math.random()*24)+'px';h.style.animationDuration=(4+Math.random()*4)+'s';h.style.animationDelay=(Math.random()*2)+'s';document.body.appendChild(h);setTimeout(()=>h.remove(),11000)}}
+const c=document.getElementById('sky'),x=c.getContext('2d');let S=[],sh=[];
+function rs(){c.width=innerWidth;c.height=innerHeight;S=Array.from({length:Math.floor(innerWidth*innerHeight/6000)},()=>({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.6+.3,p:Math.random()*6.28,s:Math.random()*.03+.01}))}
+addEventListener('resize',rs);rs();
+function draw(){x.clearRect(0,0,c.width,c.height);
+for(const s of S){s.p+=s.s;x.globalAlpha=.4+.6*Math.abs(Math.sin(s.p));x.fillStyle='#fff';x.beginPath();x.arc(s.x,s.y,s.r,0,6.28);x.fill()}
+if(Math.random()<.008)sh.push({x:Math.random()*c.width,y:Math.random()*c.height*.4,l:0});
+sh=sh.filter(m=>m.l<40);for(const m of sh){m.l++;x.globalAlpha=1-m.l/40;x.strokeStyle='#fff';x.lineWidth=2;x.beginPath();x.moveTo(m.x+m.l*8,m.y+m.l*4);x.lineTo(m.x+m.l*8-60,m.y+m.l*4-30);x.stroke()}
+x.globalAlpha=1;requestAnimationFrame(draw)}
+draw();
+</script>
+</body>
+</html>
